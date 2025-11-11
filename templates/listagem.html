@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>    
+</head>
+<body>
+    <header>
+        <h1>Listagem de Clientes</h1>
+    </header>
+    <main>
+        <ul>
+        {% for id, nome, email in lista_clientes %}
+            <li>{{id}}, {{nome}}, {{email}}</li>            
+        {% endfor %}        
+        </ul>
+    </main>
+    
+    <footer>
+        {{copyright}}
+    </footer>
+</body>
+</html>

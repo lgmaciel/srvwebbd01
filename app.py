@@ -2,7 +2,16 @@ from flask import Flask, request, render_template
 
 import sqlite3
 
-def model_cadastrar_usuario(nome, email):
+def listar_clientes():
+    with sqlite3.connect("clientes.db") as conn:
+        sql_listar_clientes = '''
+            SELECT id, nome, email FROM clientes;
+            '''
+        cur = conn.cursor()
+        cur.execute(sql_listar_clientes)
+        return cur.fetchall() # retorna uma lista de tuplas (id, nome, email)
+
+def model_cadastrar_cliente(nome, email):
     with sqlite3.connect("clientes.db") as conn:
         sql_cadastrar_cliente = '''
         INSERT INTO clientes (nome, email)
@@ -12,17 +21,22 @@ def model_cadastrar_usuario(nome, email):
 
 srv = Flask(__name__)
 
-@srv.route("/")
-def get_home():
+@srv.get("/cadastrar")
+def get_form_cadastro():
     return render_template("form_cadastro.html")
 
-@srv.route("/cadastrar",methods=['POST'])
-
-def cadastrar_usuario():
+@srv.post("/cadastrar")
+def cadastrar_cliente():
     nome =  request.form["nome"]  # <input name='nome' ...>
     email = request.form["email"] # <input name='email' ...>
-    model_cadastrar_usuario(nome, email)
+    model_cadastrar_cliente(nome, email)
     return "<h3>Cadastrado</h3>"
+
+@srv.get("/listar")
+def get_listagem_clientes():
+    clientes = listar_clientes() # acesso à model
+    #clientes é uma lista de tuplas (id, nome, email)
+    return render_template("listagem.html", lista_clientes = clientes)
 
 if __name__ == "__main__":
     srv.run(host="localhost",
