@@ -2,7 +2,7 @@ from flask import Flask, request, render_template
 
 import sqlite3
 
-def listar_clientes():
+def model_listar_clientes():
     with sqlite3.connect("clientes.db") as conn:
         sql_listar_clientes = '''
             SELECT id, nome, email FROM clientes;
@@ -34,7 +34,7 @@ def cadastrar_cliente():
 
 @srv.get("/listar")
 def get_listagem_clientes():
-    clientes = listar_clientes() # acesso à model
+    clientes = model_listar_clientes() # acesso à model
     #clientes é uma lista de tuplas (id, nome, email)
     return render_template("listagem.html", lista_clientes = clientes)
 
